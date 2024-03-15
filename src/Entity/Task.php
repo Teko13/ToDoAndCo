@@ -27,7 +27,7 @@ class Task
     private ?bool $is_done = false;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn()]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
     public function getId(): ?int
