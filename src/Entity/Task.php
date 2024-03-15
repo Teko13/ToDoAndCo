@@ -26,6 +26,10 @@ class Task
     #[ORM\Column]
     private ?bool $is_done = false;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn()]
+    private ?User $author = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -84,5 +88,17 @@ class Task
     }
     public function __construct() {
         $this->setCreatedAt(new \DateTime);
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }

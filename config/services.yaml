@@ -7,7 +7,7 @@ parameters:
 
 services:
   # default configuration for services in *this* file
-  #   App\Entity\Task: ~
+  Symfony\Component\HttpFoundation\Session\Session: ~
   #   App\Entity\User: ~
   _defaults:
     autowire: true # Automatically injects dependencies in your services.
