@@ -30,7 +30,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->taskAction->saveNewTask($task);
+            $this->taskAction->save($task);
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
             return $this->redirectToRoute('tasks_list');
         }
@@ -69,14 +69,10 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($task);
-            $this->em->flush();
-
+            $this->taskAction->save($task);
             $this->addFlash('success', 'La tâche a bien été modifiée.');
-
             return $this->redirectToRoute('tasks_list');
         }
-
         return $this->render('task/edit.html.twig', [
             'form' => $form->createView(),
             'task' => $task,

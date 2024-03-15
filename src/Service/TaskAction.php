@@ -8,10 +8,14 @@ use Symfony\Component\Security\Core\Security;
 class TaskAction 
 {
         public function __construct(private EntityManagerInterface $em, private Security $security) {}
-        public function saveNewTask(Task $task)
+        public function save(Task $task)
         {
-            $user = $this->security->getUser();
-            $task->setAuthor($user);
+            // do not assigned task's author if is already set (edit edit context)
+            if(!$task->getAuthor())
+            {
+                $user = $this->security->getUser();
+                $task->setAuthor($user);
+            }
             $this->em->persist($task);
             $this->em->flush();
             return $task;
