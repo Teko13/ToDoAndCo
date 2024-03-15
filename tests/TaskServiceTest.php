@@ -4,12 +4,12 @@ namespace App\Tests;
 
 use App\Entity\Task;
 use App\Entity\User;
-use App\Service\TaskAction;
+use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Security;
 
-class TaskActionTest extends TestCase
+class TaskServiceTest extends TestCase
 {
     public function testSaveNewTask(): void
     {
@@ -23,8 +23,8 @@ class TaskActionTest extends TestCase
         $emMock->expects($this->once())->method("persist")->with($this->isInstanceOf(Task::class));
         $emMock->expects($this->once())->method("flush");
         // Test
-        $taskAction = new TaskAction($emMock, $securityMock);
-        $result = $taskAction->save(new Task);
+        $taskService = new TaskService($emMock, $securityMock);
+        $result = $taskService->save(new Task);
         // Assertion
         $this->assertNotNull($result->getAuthor());
         $this->assertEquals($result->getAuthor()->getUsername(), $user->getUsername());
@@ -47,8 +47,8 @@ class TaskActionTest extends TestCase
         $emMock->expects($this->once())->method("persist")->with($this->isInstanceOf(Task::class));
         $emMock->expects($this->once())->method("flush");
         // Test
-        $taskAction = new TaskAction($emMock, $securityMock);
-        $result = $taskAction->save($task);
+        $taskService = new TaskService($emMock, $securityMock);
+        $result = $taskService->save($task);
         // Assertion
         $this->assertEquals($result->getAuthor()->getUsername(), $author->getUsername());
     }

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use App\Service\TaskAction;
+use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
-    public function __construct(private TaskAction $taskAction, private EntityManagerInterface $em) {}
+    public function __construct(private TaskService $taskService, private EntityManagerInterface $em) {}
     #[Route('/tasks', name: 'tasks_list')]
     public function tasksList(): Response
     {
@@ -22,7 +22,7 @@ class TaskController extends AbstractController
         ]);
     }
     #[Route("/tasks/create", name: "create_task")]
-    public function createAction(Request $request): Response
+    public function createTask(Request $request): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -30,7 +30,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->taskAction->save($task);
+            $this->taskService->save($task);
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
             return $this->redirectToRoute('tasks_list');
         }
@@ -38,7 +38,7 @@ class TaskController extends AbstractController
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
     #[Route("/tasks/{id}/toggle", name: "toggle_task")]
-    public function toggleTaskAction(Request $request):Response
+    public function toggleTask(Request $request):Response
     {
         $task = $this->em->getRepository(Task::class)->findOneBy(["id" => $request->attributes->get("id")]);
         $task->toggle(!$task->isDone());
@@ -50,26 +50,26 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('tasks_list');
     }
     #[Route("/tasks/{id}/delete", name: "delete_task")]
-    public function deleteTaskAction(Request $request):Response
+    public function deleteTask(Request $request):Response
     {
         $task = $this->em->getRepository(Task::class)->findOneBy(["id"=>$request->attributes->get("id")]);
-        $this->em->remove($task);
-        $this->em->flush();
-
+        $this->denyAccessUnlessGranted("CAN_EDIT", $task);
+        $this->taskService->delete($task);
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('tasks_list');
     }
     #[Route("/tasks/{id}/edit", name: "edit_task")]
-    public function editAction(Request $request):Response
+    public function editTask(Request $request):Response
     {
         $task = $this->em->getRepository(Task::class)->findOneBy(["id"=>$request->attributes->get("id")]);
+        $this->denyAccessUnlessGranted("CAN_EDIT", $task);
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->taskAction->save($task);
+            $this->taskService->save($task);
             $this->addFlash('success', 'La tâche a bien été modifiée.');
             return $this->redirectToRoute('tasks_list');
         }
