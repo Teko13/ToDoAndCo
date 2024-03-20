@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Security;
 class TaskServiceTest extends TestCase
 {
     public function testSaveNewTask(): void
+    // This test verifies if an author is correctly assigned to the new task.
     {
         // Mocking methode dependences
         $securityMock = $this->getMockBuilder(Security::class)->disableOriginalConstructor()->getMock();
@@ -32,6 +33,7 @@ class TaskServiceTest extends TestCase
 
     }
     public function testSaveExistingTask(): void
+    // This test checks that the service does not change the author when the task already has one.
     {
         // Mocking methode dependences
         $securityMock = $this->getMockBuilder(Security::class)->disableOriginalConstructor()->getMock();
@@ -52,4 +54,5 @@ class TaskServiceTest extends TestCase
         // Assertion
         $this->assertEquals($result->getAuthor()->getUsername(), $author->getUsername());
     }
+    
 }

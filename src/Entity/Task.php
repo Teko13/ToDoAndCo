@@ -82,9 +82,10 @@ class Task
 
         return $this;
     }
-    public function toggle($flag)
+    public function toggle(bool $flag): static
     {
         $this->setIsDone($flag);
+        return $this;
     }
     public function __construct() {
         $this->setCreatedAt(new \DateTime);

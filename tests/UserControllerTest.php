@@ -50,8 +50,31 @@ class UserControllerTest extends WebTestCase
         $crawler = $client->request('GET', $userCreationRoute);
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton("Ajouter")->form();
-        $form["user[username]"] = "test";
+        // To ensure we have a unique username for each test, we generate a random ID as a suffix to the username.
+        $form["user[username]"] = "username_". uniqid();
         $form["user[email]"] = "test@gmail.com";
+        $form["user[password][first]"] = "password";
+        $form["user[password][second]"] = "password";
+        $client->submit($form);
+        $this->assertResponseRedirects($redirectionUrl);
+        $client->followRedirect();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        
+    }
+    public function testEdit(): void
+    {
+        $client = static::createClient();
+        $userRepos = static::getContainer()->get(UserRepository::class);
+        $admin = $userRepos->findOneBy(["username" => "admin"]);
+        $user = $userRepos->findOneBy(["username" => "user"]);
+        $router = static::getContainer()->get(RouterInterface::class);
+        $userEditionRoute = $router->generate("edit_user", ["id" => $user->getId()], RouterInterface::ABSOLUTE_PATH);
+        $redirectionUrl = $router->generate("users_list");
+        $client->loginUser($admin);
+        $crawler = $client->request("GET", $userEditionRoute);
+        $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton("Modifier")->form();
+        $form["user[email]"] = "test-edit-user-email@gmail.com";
         $form["user[password][first]"] = "password";
         $form["user[password][second]"] = "password";
         $client->submit($form);

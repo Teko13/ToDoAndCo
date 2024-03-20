@@ -30,6 +30,22 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         
     }
+    public function testToggleTask(): void
+    {
+        $client = static::createClient();
+        $userRepo = static::getContainer()->get(UserRepository::class);
+        $taskRepo = static::getContainer()->get(TaskRepository::class);
+        $router = static::getContainer()->get(RouterInterface::class);
+        $redirectionUrl = $router->generate("tasks_list");
+        $task = $taskRepo->findOneBy([]);
+        $toggleTaskRoute = $router->generate("toggle_task",["id" => $task->getId()], RouterInterface::ABSOLUTE_PATH);
+        $user = $userRepo->findOneBy(["username" => "admin"]);
+        $client->loginUser($user);
+        $client->request('GET', $toggleTaskRoute);
+        $client->followRedirect();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        
+    }
     public function testEdit():void
     {
         $client = static::createClient();
@@ -37,7 +53,7 @@ class TaskControllerTest extends WebTestCase
         $userRepos = static::getContainer()->get(UserRepository::class);
         $user = $userRepos->findOneBy(["username" => "admin"]);
         $router = static::getContainer()->get(RouterInterface::class);
-        $task = $taskRepos->findOneBy(["author" => $user->getId()]);
+        $task = $taskRepos->findOneBy([]);
         $taskEditionRoute = $router->generate("edit_task", ["id" => $task->getId()], RouterInterface::ABSOLUTE_PATH);
         $redirectionUrl = $router->generate("tasks_list");
         $client->loginUser($user);
@@ -73,9 +89,9 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
         $taskRepos = static::getContainer()->get(TaskRepository::class);
         $userRepos = static::getContainer()->get(UserRepository::class);
-        $user = $userRepos->findOneBy(["username" => "user"]);
+        $user = $userRepos->findOneBy(["username" => "admin"]);
         $router = static::getContainer()->get(RouterInterface::class);
-        $task = $taskRepos->findOneBy(["author" => $user->getId()]);
+        $task = $taskRepos->findOneBy([]);
         $redirectionUrl = $router->generate("tasks_list");
         $taskDeletionRoute = $router->generate("delete_task", ["id" => $task->getId()], RouterInterface::ABSOLUTE_PATH);
         $client->loginUser($user);
@@ -85,3 +101,4 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 }
+

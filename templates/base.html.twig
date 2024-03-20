@@ -12,10 +12,12 @@
 
 		<!-- Bootstrap Core CSS -->
 		<link
-		href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+		href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
 
 		<!-- Custom CSS -->
-		<link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+		<link href="{{ app.request.schemeAndHttpHost }}/css/shop-homepage.css" rel="stylesheet">
+
 
 	</head>
 
@@ -33,12 +35,12 @@
 		<!-- Page Content -->
 		<div class="container">
 			<div class="row">
-				<a href="{{ path('create_user') }}" class="btn btn-primary">Créer un utilisateur</a>
-
-
 				{% if app.user %}
+					{% if is_granted("ROLE_ADMIN") %}
+						<a href="{{ path('create_user') }}" class="btn btn-primary">Créer un utilisateur</a>
+						<a href="{{ path('users_list') }}" class="btn btn-warning">List utilisateurs</a>
+					{% endif %}
 					<a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
-
 				{% endif %}
 
 				{% if not app.user and 'login' != app.request.attributes.get('_route') %}
@@ -90,7 +92,9 @@
 
 			</div>
 
-			<script src="{{ asset('js/jquery.js') }}"></script>
-			<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+			<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.bundle.min.js"></script>
+
+
 		</body>
 	</html>

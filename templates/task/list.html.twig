@@ -20,9 +20,11 @@
 							{% endif %}
 						</h4>
 						<h4>
-							<a href="{{ path('edit_task', {'id' : task.id }) }}">{{ task.title }}</a>
-
-
+							{% if app.user == task.author or is_granted("ROLE_ADMIN") %}
+								<a href="{{ path('edit_task', {'id' : task.id }) }}">{{ task.title }}</a>
+							{% else %}
+								{{task.title}}
+							{% endif %}
 						</h4>
 						<p>{{ task.content }}</p>
 					</div>
@@ -35,11 +37,15 @@
 								{% endif %}
 							</button>
 						</form>
-						<form action="{{ path('delete_task', {'id' : task.id }) }}">
+						{% if app.user == task.author or is_granted("ROLE_ADMIN") %}
+
+							<form action="{{ path('delete_task', {'id' : task.id }) }}">
 
 
-							<button class="btn btn-danger btn-sm pull-right">Supprimer</button>
-						</form>
+								<button class="btn btn-danger btn-sm pull-right">Supprimer</button>
+							</form>
+
+						{% endif %}
 					</div>
 				</div>
 			</div>

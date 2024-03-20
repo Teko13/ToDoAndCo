@@ -21,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column]
-    private ?array $roles = [];
+    private ?array $roles = ["ROLE_USER"];
 
     /**
      * @var string The hashed password
@@ -37,7 +37,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->setRoles(["ROLE_USER"]);
         $this->tasks = new ArrayCollection();
     }
 
