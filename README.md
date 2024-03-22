@@ -87,6 +87,6 @@ Config your testing environment variables follows a similar process:
 
 7. Start server: go to public/ folder and start your local server
 
-## Command
+## Command (Deprecated)
 
 The command 'assign-anon-user' has been created to assign an anonymous user to each task that has no author. This operation can be executed using the command `php bin/console assign-anon-user`. However, it's important to note that this command should no longer be necessary as the application has evolved to automatically assign an author to every new task created. This enhancement ensures that all tasks have associated authors right from their creation, maintaining consistency and accountability within the system's task management process.
