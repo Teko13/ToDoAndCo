@@ -42,7 +42,7 @@ These objectives are designed to address existing issues, introduce critical fea
    composer install
    ```
 
-3. # Environment Variables Configurations
+3. Environment Variables Configurations
 
 ## Production Environment
 
