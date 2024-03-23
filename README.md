@@ -1,4 +1,4 @@
-# ToDo List Project
+## ToDo List Project
 
 ## Description
 
@@ -54,7 +54,6 @@ To configure your production environment variables:
 - Edit the `.env.local` file and set the environment variables specific to your production environment.
 - Make sure that the `.env.local` file is ignored by your version control system (e.g., by adding it to your `.gitignore` file).
 
-
 ## Testing Environment
 
 For the testing environment, you should use the `.env.test` and `.env.test.local` files. The `.env.test` file is used to set default configurations specific to the test environment, while `.env.test.local` can be used for overriding these defaults with values specific to your local test environment.
@@ -71,12 +70,12 @@ Config your testing environment variables follows a similar process:
    php bin/console doctrine:database:create
    ```
 
-
 5. Create Schema: run
 
    ```
    php bin/console doctrine:schema:update --force
    ```
+
 6. Load Data: run
 
    ```
