@@ -77,16 +77,20 @@ Config your testing environment variables follows a similar process:
    ```
 
 6. Load Data: run
-- for prod environement
+- for prod environment
+
    ```
    php bin/console d:f:l --group=group_app
    ```
-   - for test environment
+   
+- for test environment
+     
      ```
    php bin/console d:f:l --group=group_test
    ```
 
-   **NOTICE**: Use the previous commands with the `--env=test` option to create the test database and generate test data.
+   ## NOTICE:
+  Use the previous commands with the `--env=test` option to create the test database and generate test data.
 
 8. Start server: go to public/ folder and start your local server
 
