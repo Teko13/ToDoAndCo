@@ -77,7 +77,7 @@ Config your testing environment variables follows a similar process:
    ```
 
 6. Load Data: run
-- for prod environment
+- for dev environment
 
    ```
    php bin/console d:f:l --group=group_app
