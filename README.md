@@ -2,7 +2,7 @@
 
 ## Description
 
-The ToDo List project is a core initiative of a freshly established startup, focusing on a daily task management application. This application, developed quickly to demonstrate viability to potential investors, serves as a Minimum Viable Product (MVP). Built with the PHP Symfony framework, known for its robustness and flexibility, the application aims at providing a straightforward and efficient way to manage daily tasks.
+The ToDo & Co project is a core initiative of a freshly established startup, focusing on a daily task management application. This application, developed quickly to demonstrate viability to potential investors, serves as a Minimum Viable Product (MVP). Built with the PHP Symfony framework, known for its robustness and flexibility, the application aims at providing a straightforward and efficient way to manage daily tasks.
 
 ## Purpose
 
