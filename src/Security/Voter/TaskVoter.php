@@ -10,10 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class TaskVoter extends Voter
 {
     public const EDIT = 'CAN_EDIT';
+    public const DELETE = "CAN_DELETE";
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT])
+        return in_array($attribute, [self::EDIT, self::DELETE])
             && $subject instanceof Task;
     }
 
@@ -32,6 +33,12 @@ class TaskVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
                 return ($subject->getAuthor() === $user || in_array("ROLE_ADMIN", $user->getRoles()));
+            case self::DELETE:
+                return
+                    (
+                        $subject->getAuthor() === $user ||
+                        (in_array("ROLE_ADMIN", $user->getRoles()) && $subject->getAuthor()->getUsername() === "anonymous")
+                    );
         }
 
         return false;

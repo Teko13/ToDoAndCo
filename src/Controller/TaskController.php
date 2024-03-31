@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Security\Voter\TaskVoter;
 use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,9 +27,7 @@ class TaskController extends AbstractController
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->taskService->save($task);
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
@@ -51,7 +50,7 @@ class TaskController extends AbstractController
     public function deleteTask(Request $request):Response
     {
         $task = $this->em->getRepository(Task::class)->findOneBy(["id"=>$request->attributes->get("id")]);
-        $this->denyAccessUnlessGranted("CAN_EDIT", $task);
+        $this->denyAccessUnlessGranted(TaskVoter::DELETE, $task);
         $this->taskService->delete($task);
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
@@ -61,7 +60,7 @@ class TaskController extends AbstractController
     public function editTask(Request $request):Response
     {
         $task = $this->em->getRepository(Task::class)->findOneBy(["id"=>$request->attributes->get("id")]);
-        $this->denyAccessUnlessGranted("CAN_EDIT", $task);
+        $this->denyAccessUnlessGranted(TaskVoter::EDIT, $task);
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
